@@ -19,12 +19,14 @@ metadata:
 	@echo BUILD_TIME_UTC IS $(BUILD_TIME_UTC)
 	@echo BUILD_ID IS $(BUILD_ID)
 
-.PHONY: app-artifacts
-app-artifacts:
+target/ch10-0.1.0.jar:
 	@echo "Building App Artifacts"
 	docker run -it --rm  -v "$(shell pwd)":/project/ -w /project/ \
     maven:3.5-jdk-10 \
     mvn clean verify
+
+.PHONY: app-artifacts
+app-artifacts: target/ch10-0.1.0.jar
 
 .PHONY: lint-dockerfile
 lint-dockerfile:
@@ -33,7 +35,7 @@ lint-dockerfile:
 	docker container run --rm -i hadolint/hadolint:v1.15.0 < multi-stage-runtime.df
 
 .PHONY: app-image
-app-image: metadata lint-dockerfile
+app-image: app-artifacts metadata lint-dockerfile
 	@echo "Building App Image"
 	docker image build -t dockerinaction/ch10:$(BUILD_ID) \
 	-f multi-stage-runtime.df \
