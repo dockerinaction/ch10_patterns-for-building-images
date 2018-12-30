@@ -70,7 +70,7 @@ inspect-image-labels:
 
 .PHONY: tag
 tag:
-	@echo "Tagging Image
+	@echo "Tagging Image"
 	docker image tag dockerinaction/ch10:$(BUILD_ID) dockerinaction/ch10:$(TAG)
 
 .PHONY: all
