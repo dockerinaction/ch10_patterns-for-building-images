@@ -1,5 +1,5 @@
 # The app-image build target defines the application image
-FROM openjdk:10-jdk-slim as app-image
+FROM openjdk:11-jdk-slim as app-image
 
 ARG BUILD_ID=unknown
 ARG BUILD_DATE=unknown

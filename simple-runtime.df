@@ -1,4 +1,4 @@
-FROM openjdk:10-jdk-slim
+FROM openjdk:11-jdk-slim
 
 COPY target/ch10-0.1.0.jar /app.jar
 

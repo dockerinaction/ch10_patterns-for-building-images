@@ -7,8 +7,8 @@ commandTests:
     args: ["-version"]
     exitCode: 0
     # OpenJDK java -version stderr will include a line like:
-    # OpenJDK Runtime Environment (build 10.0.2+13-Debian-2)
-    expectedError: ["OpenJDK Runtime Environment.* 10.*"]
+    # OpenJDK Runtime Environment 18.9 (build 11.0.3+7)
+    expectedError: ["OpenJDK Runtime Environment.*build 11\\..*"]
 
 # Verify the application archive is readable and owned by root
 fileExistenceTests:
