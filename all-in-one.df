@@ -1,4 +1,4 @@
-FROM maven:3.5-jdk-10
+FROM maven:3.6-jdk-11
 
 ENV WORKDIR=/project
 RUN mkdir -p ${WORKDIR}

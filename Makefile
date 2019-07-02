@@ -5,11 +5,16 @@ ifeq ($(strip $(BUILD_ID)),)
 	BUILD_TIME_RFC_3339 := $(shell date -u -r $(BUILD_TIME_EPOCH) '+%Y-%m-%dT%I:%M:%SZ')
 	BUILD_TIME_UTC := $(shell date -u -r $(BUILD_TIME_EPOCH) +'%Y%m%d-%H%M%S')
 	BUILD_ID := $(BUILD_TIME_UTC)-$(VCS_REF)
-endif 
+endif
 
 ifeq ($(strip $(TAG)),)
 	TAG := unknown
 endif 
+
+.PHONY: clean
+clean:
+	@echo "Cleaning"
+	rm -rf target
 
 .PHONY: metadata
 metadata:
@@ -22,7 +27,7 @@ metadata:
 target/ch10-0.1.0.jar:
 	@echo "Building App Artifacts"
 	docker run -it --rm  -v "$(shell pwd)":/project/ -w /project/ \
-    maven:3.5-jdk-10 \
+    maven:3.6-jdk-11 \
     mvn clean verify
 
 .PHONY: app-artifacts
@@ -43,6 +48,8 @@ app-image: app-artifacts metadata lint-dockerfile
 	--build-arg BUILD_DATE='$(BUILD_TIME_RFC_3339)' \
 	--build-arg VCS_REF='$(VCS_REF)' \
 	.
+	@echo "Built App Image. BUILD_ID: $(BUILD_ID)"
+
 .PHONY: app-image-debug
 app-image-debug: app-image
 	@echo "Building Debug App Image"
@@ -53,6 +60,7 @@ app-image-debug: app-image
 	--build-arg BUILD_DATE='$(BUILD_TIME_RFC_3339)' \
 	--build-arg VCS_REF='$(VCS_REF)' \
 	.
+	@echo "Built Debug App Image. BUILD_ID: $(BUILD_ID)"
 
 .PHONY: image-tests
 image-tests:
