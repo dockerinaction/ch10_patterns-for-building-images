@@ -2,8 +2,10 @@
 ifeq ($(strip $(BUILD_ID)),)
 	VCS_REF := $(shell git rev-parse --short HEAD)
 	BUILD_TIME_EPOCH := $(shell date +"%s")
-	BUILD_TIME_RFC_3339 := $(shell date -u -r $(BUILD_TIME_EPOCH) '+%Y-%m-%dT%I:%M:%SZ')
-	BUILD_TIME_UTC := $(shell date -u -r $(BUILD_TIME_EPOCH) +'%Y%m%d-%H%M%S')
+	BUILD_TIME_RFC_3339 := \
+		$(shell date -u -r $(BUILD_TIME_EPOCH) '+%Y-%m-%dT%I:%M:%SZ')
+	BUILD_TIME_UTC := \
+		$(shell date -u -r $(BUILD_TIME_EPOCH) +'%Y%m%d-%H%M%S')
 	BUILD_ID := $(BUILD_TIME_UTC)-$(VCS_REF)
 endif
 
@@ -37,7 +39,8 @@ app-artifacts: target/ch10-0.1.0.jar
 lint-dockerfile:
 	@set -e
 	@echo "Linting Dockerfile"
-	docker container run --rm -i hadolint/hadolint:v1.15.0 < multi-stage-runtime.df
+	docker container run --rm -i hadolint/hadolint:v1.15.0 < \
+		multi-stage-runtime.df
 
 .PHONY: app-image
 app-image: app-artifacts metadata lint-dockerfile
@@ -74,7 +77,8 @@ image-tests:
 
 .PHONY: inspect-image-labels
 inspect-image-labels:
-	docker image inspect --format '{{ json .Config.Labels }}' dockerinaction/ch10:$(BUILD_ID) | jq
+	docker image inspect --format '{{ json .Config.Labels }}' \
+		dockerinaction/ch10:$(BUILD_ID) | jq
 
 .PHONY: tag
 tag:
